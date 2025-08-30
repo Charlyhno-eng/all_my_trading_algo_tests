@@ -1,0 +1,6 @@
+ccxt
+pandas
+mplfinance
+matplotlib
+scikit-learn
+vectorbt
