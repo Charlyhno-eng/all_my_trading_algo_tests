@@ -4,3 +4,4 @@ mplfinance
 matplotlib
 scikit-learn
 vectorbt
+tabulate
