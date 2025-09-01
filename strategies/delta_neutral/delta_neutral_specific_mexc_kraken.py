@@ -2,7 +2,7 @@ import ccxt
 from tabulate import tabulate
 from datetime import datetime, timedelta
 
-PAIR_USDT = "BLAST/USDT"
+PAIR_USDT = "BTC/USDT"
 
 def pair_for_kraken(pair_usdt):
     """Transforme la pair USDT en USD pour Kraken (enlève juste le 'T')."""
@@ -42,7 +42,7 @@ def get_funding_rate_mexc(symbol=PAIR_USDT + ":USDT"):
         "beneficiary": beneficiary,
         "next_funding": next_funding_dt,
         "interval_hours": interval_hours,
-        "apr": funding_365d,
+        "apy": funding_365d,
     }
 
 def get_funding_rate_kraken(symbol=None):
@@ -66,15 +66,15 @@ def get_funding_rate_kraken(symbol=None):
         "beneficiary": beneficiary,
         "next_funding": next_funding_dt,
         "interval_hours": interval_hours,
-        "apr": funding_365d,
+        "apy": funding_365d,
     }
 
 def compute_delta_neutral(long_pos, short_pos):
     long_effective = -long_pos['funding_24h']
     short_effective = short_pos['funding_24h']
     net_daily = long_effective + short_effective
-    net_apr = net_daily * 365
-    return net_daily, net_apr
+    net_apy = net_daily * 365
+    return net_daily, net_apy
 
 
 if __name__ == "__main__":
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         long_pos = kraken
         short_pos = mexc
 
-    net_daily, net_apr = compute_delta_neutral(long_pos, short_pos)
+    net_daily, net_apy = compute_delta_neutral(long_pos, short_pos)
 
     table = [
         ["Long", long_pos['platform'], f"{long_pos['funding_rate_percent']:.6f}%", long_pos['beneficiary'], long_pos['next_funding']],
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     headers = ["Position", "Plateforme", "Funding actuel", "Bénéficiaire", "Prochain funding"]
     print(tabulate(table, headers=headers, tablefmt="grid"))
-    print(f"\nRendement net approximatif delta neutre: {net_daily:.6f}% / jour, APR ≈ {net_apr:.2f}%")
+    print(f"\nRendement net approximatif delta neutre: {net_daily:.6f}% / jour, APY ≈ {net_apy:.2f}%")
 
     # Vérifier si les fundings vont dans le même sens
     if (mexc['beneficiary'] == kraken['beneficiary']):
