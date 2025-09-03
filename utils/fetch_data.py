@@ -7,17 +7,17 @@ if not os.path.exists('data_ohlc'):
     os.makedirs('data_ohlc')
 
 exchange = ccxt.binance()
-symbol = 'AAVE/USDT'
-token_pair = 'aave_usdt'
+symbol = 'BTC/USDT'
+token_pair = 'btc_usdt'
 timeframes = ['1d', '4h', '1h', '30m']
-start_date = '2020-01-01T00:00:00Z'
-end_date = '2024-12-31T23:59:59Z'
+start_date = '2017-01-01T00:00:00Z'
+end_date = '2025-08-31T23:59:59Z'
 
 for timeframe in timeframes:
     since = exchange.parse8601(start_date)
     end = exchange.parse8601(end_date)
     all_ohlcv = []
-    save_data_filename = f'{token_pair}_{timeframe}_2020_2024.csv'
+    save_data_filename = f'{token_pair}_{timeframe}_2017_2025.csv'
     while since < end:
         try:
             ohlcv = exchange.fetch_ohlcv(symbol, timeframe=timeframe, since=since, limit=1000)
