@@ -6,6 +6,7 @@ import pandas as pd
 from hmmlearn.hmm import GaussianHMM
 
 train_file = "1-btc_processed_train.csv"
+model_path = "2-models/hmm_model.pkl"
 
 warnings.filterwarnings("ignore")
 os.makedirs("data/data_processed_hmm/2-models", exist_ok=True)
@@ -37,7 +38,7 @@ for regime in regime_means.index:
 
 df['signal'] = df['market_regime'].map(signal_map)
 
-with open("data/data_processed_hmm/2-models/hmm_model.pkl", "wb") as f:
+with open(f"data/data_processed_hmm/{model_path}", "wb") as f:
     pickle.dump({'model': model, 'means': means, 'stds': stds, 'signal_map': signal_map}, f)
 
 df.to_csv("data/data_processed_hmm/2-btc_with_signals_train.csv", index=False)
