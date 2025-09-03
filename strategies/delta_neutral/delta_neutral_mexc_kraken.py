@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import csv
 import os
 
-COMMON_PAIRS_FILE = "data_delta_neutral/common_pairs_mexc_kraken.csv"
+COMMON_PAIRS_FILE = "data/data_delta_neutral/common_pairs_mexc_kraken.csv"
 
 def pair_for_kraken(pair_usdt):
     """Transforme la pair USDT en USD pour Kraken."""
