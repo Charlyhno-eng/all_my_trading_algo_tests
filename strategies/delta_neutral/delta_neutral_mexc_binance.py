@@ -49,7 +49,7 @@ if __name__ == "__main__":
         net_daily, net_apy = compute_delta_neutral(mexc)
 
         # Filtrer uniquement APY positifs et >= 15%
-        if net_apy < 15:
+        if net_apy < 20:
             continue
 
         table = [
