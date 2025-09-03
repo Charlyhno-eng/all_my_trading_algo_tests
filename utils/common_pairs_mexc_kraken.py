@@ -2,7 +2,7 @@ import ccxt
 import csv
 import os
 
-DATA_FOLDER = "data_delta_neutral"
+DATA_FOLDER = "data/data_delta_neutral"
 os.makedirs(DATA_FOLDER, exist_ok=True)
 
 def normalize_pair(symbol, exchange):
