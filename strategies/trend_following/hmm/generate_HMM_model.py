@@ -10,11 +10,11 @@ from hmmlearn.hmm import GaussianHMM
 warnings.filterwarnings("ignore")
 
 
-ticker = "TSLA"
-first_period_start_date  = "2010-07-01"
-first_period_end_date    = "2019-12-31"
+ticker = "RMS.PA"
+first_period_start_date = "2000-01-01"
+first_period_end_date = "2019-12-31"
 second_period_start_date = "2020-01-01"
-second_period_end_date   = "2025-08-31"
+second_period_end_date = "2025-08-31"
 
 BASE_DIR = f"data/data_processed_hmm/{ticker}"
 os.makedirs(BASE_DIR, exist_ok=True)

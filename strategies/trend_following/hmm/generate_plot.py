@@ -7,15 +7,22 @@ from sklearn.linear_model import LinearRegression
 
 warnings.filterwarnings("ignore")
 
-ticker = "TSLA"
+ticker = "MC.PA"
 
 BASE_DIR = f"data/data_processed_hmm/{ticker}"
 TEST_FILE_SIGNALS = f"{ticker}_with_signals_test.csv"
 MODEL_PATH = "models/hmm_model.pkl"
 
 USE_SHORT_CURVE = False  # False = long/flat
-FEES_PCT = 0.0           # frais aller-retour en %
 TITLE = f"HMM Strategy vs {ticker} Buy & Hold"
+
+# --- Paramètres delta neutral ---
+APY = 0
+daily_apy = np.log(1 + (APY / 100)) / 365
+
+# --- Frais Binance ---
+FEES_MAKER = 0.1
+FEES_TAKER = 0.1
 
 # --- Charger modèle ---
 with open(f"{BASE_DIR}/{MODEL_PATH}", "rb") as f:
@@ -39,10 +46,17 @@ else:
 df['log_returns'] = np.log(df['close'] / df['close'].shift(1))
 df['log_returns'].fillna(0, inplace=True)
 
-# --- Coûts de transaction ---
-pos_change = df['position'].diff().abs().fillna(0.0)
-fees_series = (FEES_PCT/100) * pos_change
+# --- Coûts de transaction avec maker et taker ---
+pos_change = df['position'].diff().fillna(0.0)
+fees_series = np.where(
+    pos_change > 0,
+    (FEES_MAKER / 100) * pos_change,
+    (FEES_TAKER / 100) * abs(pos_change)
+)
+
+# --- Rendement stratégie avec delta neutral pendant flat ---
 df['strategy_log_ret'] = df['position'] * df['log_returns'] - fees_series
+df.loc[df['position'] == 0, 'strategy_log_ret'] = daily_apy
 
 # --- Cumulatif returns ---
 df['strategy_cumret'] = np.exp(df['strategy_log_ret'].cumsum())
@@ -60,13 +74,12 @@ df['bh_dd'] = compute_drawdown(df['bh_cumret'])
 # --- Statistiques de performance ---
 def compute_stats(strategy_ret, benchmark_ret):
     mu_s, sd_s = strategy_ret.mean(), strategy_ret.std(ddof=0)
-    sharpe = (mu_s / (sd_s + 1e-12)) * np.sqrt(252) if sd_s>0 else 0.0
+    sharpe = (mu_s / (sd_s + 1e-12)) * np.sqrt(252) if sd_s > 0 else 0.0
     cum_return = np.exp(strategy_ret.cumsum().iloc[-1])
-
     max_dd = compute_drawdown(np.exp(strategy_ret.cumsum())).min() * 100  # en %
 
     # Alpha & Beta
-    X = benchmark_ret.values.reshape(-1,1)
+    X = benchmark_ret.values.reshape(-1, 1)
     y = strategy_ret.values
     reg = LinearRegression().fit(X, y)
     beta = reg.coef_[0]
@@ -83,33 +96,42 @@ def compute_stats(strategy_ret, benchmark_ret):
 stats_strategy = compute_stats(df['strategy_log_ret'], df['log_returns'])
 stats_bh = compute_stats(df['log_returns'], df['log_returns'])
 
+# --- Comptage des transactions ---
+df['pos_change'] = df['position'].diff().fillna(0)
+nb_achats = (df['pos_change'] == 1).sum()
+nb_ventes = (df['pos_change'] == -1).sum()
+
 # --- Affichage des stats ---
 print("Hyperparamètres retenus:", params)
-print("\n--- Stratégie HMM ---")
-for k,v in stats_strategy.items():
+print("\n--- Stratégie HMM + Delta Neutral ---")
+for k, v in stats_strategy.items():
     print(f"{k}: {v:.4f}")
+print(f"Nombre d'achats effectués: {nb_achats}")
+print(f"Nombre de ventes effectuées: {nb_ventes}")
+
 print(f"\n--- Buy & Hold {ticker} ---")
-for k,v in stats_bh.items():
+for k, v in stats_bh.items():
     print(f"{k}: {v:.4f}")
 
 # --- Plot cumulatif return + drawdown + positions ---
-fig, axes = plt.subplots(3,1, figsize=(14,12), sharex=True)
+fig, axes = plt.subplots(3, 1, figsize=(14, 12), sharex=True)
 
 # Cumulatif return
 axes[0].plot(df['timestamp'], df['bh_cumret'], label=f"Buy & Hold {ticker}", color='blue')
-axes[0].plot(df['timestamp'], df['strategy_cumret'], label="HMM Strategy", color='orange')
+axes[0].plot(df['timestamp'], df['strategy_cumret'], label="HMM + Delta Neutral", color='orange')
 axes[0].set_ylabel("Cumulative Return")
 axes[0].set_title(f"{TITLE}\n"
                   f"n_components={params.get('n_components')} | "
                   f"delay={params.get('momentum_delay')} | "
                   f"n_moms={params.get('n_momentums')} | "
-                  f"fees={FEES_PCT:.3f}%")
+                  f"fees maker={FEES_MAKER}% | fees taker={FEES_TAKER}% | "
+                  f"delta neutral APY={APY:.1f}%")
 axes[0].legend()
 axes[0].grid(True)
 
 # Drawdown
-axes[1].plot(df['timestamp'], df['strategy_dd']*100, label="HMM Strategy DD", color='orange')
-axes[1].plot(df['timestamp'], df['bh_dd']*100, label=f"{ticker} Buy & Hold DD", color='blue')
+axes[1].plot(df['timestamp'], df['strategy_dd'] * 100, label="HMM + Delta Neutral DD", color='orange')
+axes[1].plot(df['timestamp'], df['bh_dd'] * 100, label=f"{ticker} Buy & Hold DD", color='blue')
 axes[1].set_ylabel("Drawdown (%)")
 axes[1].legend()
 axes[1].grid(True)
