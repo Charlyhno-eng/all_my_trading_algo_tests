@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 
 warnings.filterwarnings("ignore")
 
-ticker = "MC.PA"
+ticker = "BTC-USD"
 
 BASE_DIR = f"data/data_processed_hmm/{ticker}"
 TEST_FILE_SIGNALS = f"{ticker}_with_signals_test.csv"

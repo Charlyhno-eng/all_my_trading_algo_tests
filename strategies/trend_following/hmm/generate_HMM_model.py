@@ -9,9 +9,8 @@ from hmmlearn.hmm import GaussianHMM
 
 warnings.filterwarnings("ignore")
 
-
-ticker = "RMS.PA"
-first_period_start_date = "2000-01-01"
+ticker = "BTC-USD"
+first_period_start_date = "2010-01-01"
 first_period_end_date = "2019-12-31"
 second_period_start_date = "2020-01-01"
 second_period_end_date = "2025-08-31"
