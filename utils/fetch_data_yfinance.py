@@ -1,7 +1,7 @@
 import os
 import yfinance as yf
 
-ticker = "BTC-USD"
+ticker = "ETH-USD"
 start_date = "2021-01-01"
 end_date = "2025-08-31"
 
