@@ -9,7 +9,7 @@ from hmmlearn.hmm import GaussianHMM
 
 warnings.filterwarnings("ignore")
 
-ticker = "BTC-USD"
+ticker = "NOVO-B.CO"
 first_period_start_date = "2010-01-01"
 first_period_end_date = "2019-12-31"
 second_period_start_date = "2020-01-01"
