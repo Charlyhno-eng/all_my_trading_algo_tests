@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 
 warnings.filterwarnings("ignore")
 
+# --- Paramètres globaux ---
 ticker = "BTC_USDT_1h"
 
 BASE_DIR = f"data/data_processed_hmm/{ticker}"
@@ -42,7 +43,7 @@ if USE_SHORT_CURVE:
 else:
     df['position'] = (df['signal'] == 1).astype(float)
 
-# --- Rendements quotidiens ---
+# --- Rendements horaires ---
 df['log_returns'] = np.log(df['close'] / df['close'].shift(1))
 df['log_returns'].fillna(0, inplace=True)
 
