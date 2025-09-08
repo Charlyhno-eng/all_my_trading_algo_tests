@@ -11,13 +11,13 @@ exchange = ccxt.mexc({"options": {"defaultType": "future"}})
 
 symbol = 'BTC/USDT'
 token_pair = 'BTC_USDT'
-timeframe = '1h'
+timeframe = '4h'
 
 # --- Périodes à télécharger ---
-train_start = '2020-01-01T00:00:00Z'
-train_end   = '2021-12-31T23:59:59Z'
+train_start = '2022-01-01T00:00:00Z'
+train_end   = '2023-12-31T23:59:59Z'
 
-test_start  = '2022-01-01T00:00:00Z'
+test_start  = '2024-01-01T00:00:00Z'
 test_end    = '2025-08-31T23:59:59Z'
 
 

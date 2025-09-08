@@ -9,12 +9,12 @@ from hmmlearn.hmm import GaussianHMM
 warnings.filterwarnings("ignore")
 
 # --- Paramètres ---
-ticker = "BTC_USDT_1h"
+ticker = "BTC_USDT_4h"
 
 # Fichiers cohérents avec le script de téléchargement
-train_start_date = "2020-01-01"
-train_end_date   = "2021-12-31"
-test_start_date  = "2022-01-01"
+train_start_date = "2022-01-01"
+train_end_date   = "2023-12-31"
+test_start_date  = "2024-01-01"
 test_end_date    = "2025-08-31"
 
 csv_train_path = f"data/data_ohlc/{ticker}_mexc_future_{train_start_date}_{train_end_date}.csv"
