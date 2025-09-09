@@ -12,10 +12,6 @@ This repository includes scripts and implementations for:
 
 ---
 
-Voici une première version d’un **README en anglais** décrivant les stratégies que tu as listées, avec le calcul demandé sur la stratégie delta neutral + staking.
-
----
-
 ## Trading Strategies
 
 ### 1. Hidden Markov Model (HMM)
