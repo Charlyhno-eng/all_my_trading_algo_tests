@@ -2,7 +2,7 @@ import ccxt
 from tabulate import tabulate
 from datetime import datetime, timedelta
 
-PAIR_USDT = "BTC/USDT"
+PAIR_USDT = "ENA/USDT"
 
 def pair_for_kraken(pair_usdt):
     """Transforme la pair USDT en USD pour Kraken (enlève juste le 'T')."""

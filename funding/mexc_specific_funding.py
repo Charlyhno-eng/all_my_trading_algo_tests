@@ -2,7 +2,7 @@ import ccxt
 from tabulate import tabulate
 from datetime import datetime
 
-PAIR = "10000WHY/USDT:USDT"
+PAIR = "PAAL/USDT:USDT"
 
 def get_funding_rate_mexc(symbol=PAIR):
     exchange = ccxt.mexc({'enableRateLimit': True})
