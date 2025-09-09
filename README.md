@@ -65,16 +65,16 @@ This setup results in:
 
 * Staking APY: **600% annualized**
 
-  * 14-day effective return = $600\% \times \frac{14}{365}$
+  * 14-day effective return = $600 \times \frac{14}{365}$
   * ≈ **23.01% in 14 days**
 
 * Shorting APY: **43.8% annualized**
 
-  * 14-day effective return = $43.8\% \times \frac{14}{365}$
+  * 14-day effective return = $43.8 \times \frac{14}{365}$
   * ≈ **1.68% in 14 days**
 
 * **Total yield (delta-neutral, 14 days):**
-  $23.01\% + 1.68\% ≈ 24.69\%$
+  $23.01 + 1.68 ≈ 24.69$%
 
 This means that by rebalancing every 14 days, the position theoretically yields **\~24.7% every cycle**.
 Annualized, if sustained and compounded, this could exceed **600%+** while remaining hedged against price volatility.
